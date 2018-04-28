@@ -22,7 +22,7 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeig
 controls = new THREE.FirstPersonControls(camera);
 controls.movementSpeed = 10;
 controls.lookSpeed = 0.1;
-controls.lookVertical = false;
+controls.lookVertical = true;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -53,6 +53,7 @@ scene.add( plane );
 for (var i = 0; i< NUMBER_OF_TREES; i++) {
     var woodtype = Math.round(Math.random());
     if(woodtype==0){
+    //create standard tree
         geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
@@ -82,6 +83,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
         scene.add( crown );
         scene.add( cylinder );
     }else if(woodtype==1){
+    //Create "nadelbaum"
         geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
