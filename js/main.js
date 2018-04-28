@@ -122,6 +122,46 @@ camera.position.z = 10;
 camera.position.y = 5;
 camera.lookAt(cylinder.position);
 window.addEventListener( 'resize', onWindowResize, false );
+
+// ------ positional audio -----
+// create an AudioListener and add it to the camera
+var listener = new THREE.AudioListener();
+camera.add( listener );
+
+// create the PositionalAudio object (passing in the listener)
+var sound = new THREE.PositionalAudio( listener );
+
+// load a sound and set it as the PositionalAudio object's buffer
+var audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
+    sound.setBuffer( buffer );
+    sound.setRefDistance( 50 );
+    sound.setRolloffFactor(5)
+    sound.play();
+});
+
+// instantiate a loader
+var loader = new THREE.OBJLoader2();
+var speakerModel = 0;
+var callbackOnLoad = function ( event ) {
+    speakerModel = event.detail.loaderRootNode;
+    scene.add( speakerModel );
+    speakerModel.add( sound );
+    speakerModel.position.x=250;
+    speakerModel.position.z=250;
+    console.log( 'Loading complete: ' + event.detail.modelName );
+
+};
+
+var onLoadMtl = function ( materials ) {
+    loader.setModelName( 'speaker' );
+    loader.setMaterials( materials );
+    loader.setLogging( true, true );
+    loader.load( 'assets/Speaker.obj', callbackOnLoad, null, null, null, false );
+};
+loader.loadMtl( 'assets/Speaker.mtl', null, onLoadMtl );
+
+
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
