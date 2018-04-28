@@ -5,10 +5,10 @@ var firefliesGeometry;
 function addFireflies(scene){
     /* DO STUFF! */
     var material = new THREE.PointCloudMaterial({
-        color: 0xFFD700
+        color: 0xFFD700,
     });
 
-    firefliesGeometry = new THREE.Geometry();
+    firefliesGeometry = new THREE.BoxGeometry( 1, 1, 1 );
     var x, y, z;
     _.times(500, function(){
         x = THREE.Math.randFloatSpread( 400 );
