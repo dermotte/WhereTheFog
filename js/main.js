@@ -12,8 +12,8 @@ function addFireflies(scene){
     firefliesGeometry = new THREE.Geometry();
     var x, y, z;
     _.times(500, function(){
-        x = THREE.Math.randFloatSpread( 400 ) + 10;
-        y = THREE.Math.randFloatSpread( 400 );
+        x = THREE.Math.randFloatSpread( 400 );
+        y = THREE.Math.randFloatSpread( 400 ) +10;
         z = THREE.Math.randFloatSpread( 400 ) ;
 
         firefliesGeometry.vertices.push(new THREE.Vector3(x, y, z));
