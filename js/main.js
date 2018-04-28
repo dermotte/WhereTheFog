@@ -74,7 +74,7 @@ var texture = new THREE.TextureLoader().load("assets/gras_dark.png");
 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 400, 400 );
 
-var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
 
 var plane = new THREE.Mesh( geometry, material );
 
@@ -110,7 +110,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/leaves.jpg");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var crown = new THREE.Mesh( geometry, material );
@@ -125,7 +125,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var cylinder = new THREE.Mesh( geometry, material );
@@ -141,7 +141,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/evergreen.jpg");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var crown = new THREE.Mesh( geometry, material );
