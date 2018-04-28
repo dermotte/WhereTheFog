@@ -1,11 +1,11 @@
-var NUMBER_OF_TREES = 1000;
+var NUMBER_OF_TREES = 200;
 
 var scene = new THREE.Scene();
 
 scene.background = new THREE.Color( 0xf0f0f0 );
 scene.add( new THREE.AmbientLight( 0x505050 ) );
 // Nebel
-scene.fog = new THREE.Fog( scene.background, 1, 250 );
+scene.fog = new THREE.Fog( scene.background, 1, 100 );
 
 // Licht
 dirLight = new THREE.DirectionalLight( 0xffffff );
@@ -18,7 +18,7 @@ dirLight.shadow.mapSize.height = 1024;
 scene.add( dirLight );
 
 var clock = new THREE.Clock();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 100 );
 controls = new THREE.FirstPersonControls(camera);
 controls.movementSpeed = 10;
 controls.lookSpeed = 0.1;
@@ -48,29 +48,74 @@ plane.scale.y = 100;
 plane.receiveShadow = true;
 scene.add( plane );
 
-// Wald
+
+//Wood
 for (var i = 0; i< NUMBER_OF_TREES; i++) {
-    geometry = new THREE.CylinderGeometry( 0.8, 1, 10 );
-    material = new THREE.MeshLambertMaterial( { color: 0xCC7224, reflectivity: 0.5 } );
-    var cylinder = new THREE.Mesh( geometry, material );
-    cylinder.castShadow = true;
-    cylinder.position.y=5;
+    var woodtype = Math.round(Math.random());
+    if(woodtype==0){
+        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
 
-    x = Math.random()*500;
-    z = Math.random()*500;
-    cylinder.position.x =  x;
-    cylinder.position.z = z ;
+        var texture = new THREE.TextureLoader().load("assets/bark.png");
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        texture.repeat.set( 4, 4 );
 
-    geometry = new THREE.SphereGeometry( 5+Math.random(), 1, 10 );
-    material = new THREE.MeshLambertMaterial( { color: 0x54F416, reflectivity: 0.5 } );
-    var crown = new THREE.Mesh( geometry, material );
-    crown.castShadow = true;
-    crown.position.y=10;
-    crown.position.x = x ;
-    crown.position.z = z ;
-    scene.add( crown );
-    scene.add( cylinder );
+        var cylinder = new THREE.Mesh( geometry, material );
+        cylinder.position.y=5;
+
+        x = Math.random()*500;
+        z = Math.random()*500;
+        cylinder.position.x =  x;
+        cylinder.position.z = z ;
+        geometry = new THREE.SphereGeometry( 5+Math.random(), 10, 32 );
+
+        var texture = new THREE.TextureLoader().load("assets/leaves.jpg");
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        texture.repeat.set( 4, 4 );
+
+        var crown = new THREE.Mesh( geometry, material );
+        randomCroneHeight = (Math.random()*10)%3;
+        crown.position.y=10+randomCroneHeight;
+        crown.position.x = x ;
+        crown.position.z = z ;
+        scene.add( crown );
+        scene.add( cylinder );
+    }else if(woodtype==1){
+        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
+
+        var texture = new THREE.TextureLoader().load("assets/bark.png");
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        texture.repeat.set( 4, 4 );
+
+        var cylinder = new THREE.Mesh( geometry, material );
+        cylinder.castShadow = true;
+        cylinder.position.y=5;
+
+        x = Math.random()*500;
+        z = Math.random()*500;
+        cylinder.position.x =  x;
+        cylinder.position.z = z ;
+
+        geometry = new THREE.ConeGeometry( 5, 20, 6 );
+
+        var texture = new THREE.TextureLoader().load("assets/evergreen.jpg");
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        texture.repeat.set( 4, 4 );
+
+        var crown = new THREE.Mesh( geometry, material );
+        randomCroneHeight = (Math.random()*10)%3;
+        crown.position.y=11+randomCroneHeight;
+        crown.position.x = x ;
+        crown.position.z = z ;
+        scene.add( crown );
+        scene.add( cylinder );
+    }
 }
+
+
 
 // camera
 camera.position.z = 10;
@@ -88,5 +133,7 @@ function onWindowResize(){
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
+
+
 
 animate();
