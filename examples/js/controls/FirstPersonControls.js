@@ -228,6 +228,16 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
+
+        const sizeOfDeadZone = 150;
+        if(this.mouseX<0 && this.mouseX> - sizeOfDeadZone) {
+            this.mouseX = 0;
+        }
+
+        if(this.mouseX>0 && this.mouseX< sizeOfDeadZone){
+			this.mouseX = 0;
+		}
+
 		this.lon += this.mouseX * actualLookSpeed;
 		if ( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 

@@ -1,5 +1,44 @@
 var NUMBER_OF_TREES = 200;
 
+var firefliesGeometry;
+
+function addFireflies(scene){
+    /* DO STUFF! */
+    var material = new THREE.PointsMaterial({
+        color: 0xFFF66D,
+
+    });
+
+    firefliesGeometry = new THREE.Geometry();
+    var x, y, z;
+    _.times(500, function(){
+        x = THREE.Math.randFloatSpread( 400 );
+        y = THREE.Math.randFloatSpread( 400 ) +10;
+        z = THREE.Math.randFloatSpread( 400 ) ;
+
+        firefliesGeometry.vertices.push(new THREE.Vector3(x, y, z));
+
+    });
+    var pointCloud = new THREE.PointCloud(firefliesGeometry, material);
+    scene.add(pointCloud);
+}
+
+function animateFireflies() {
+
+    //wiggle wiggle...
+    _.forEach(firefliesGeometry.vertices, function(particle){
+        var dX, dY, dZ;
+        dX = Math.random() * 0.1 - 0.05;
+        dY = Math.random() * 0.1 - 0.05;
+        dZ = Math.random() * 0.1 - 0.05;
+
+        particle.add(new THREE.Vector3(dX, dY, dZ));
+    });
+    firefliesGeometry.verticesNeedUpdate = true;
+}
+
+
+
 var scene = new THREE.Scene();
 
 scene.background = new THREE.Color( 0x606060 );
@@ -36,7 +75,7 @@ var texture = new THREE.TextureLoader().load("assets/gras_dark.png");
 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 400, 400 );
 
-var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
 
 var plane = new THREE.Mesh( geometry, material );
 
@@ -48,6 +87,7 @@ plane.scale.y = 100;
 plane.receiveShadow = true;
 scene.add( plane );
 
+addFireflies(scene);
 
 //Wood
 for (var i = 0; i< NUMBER_OF_TREES; i++) {
@@ -72,7 +112,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/leaves.jpg");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var crown = new THREE.Mesh( geometry, material );
@@ -88,7 +128,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var cylinder = new THREE.Mesh( geometry, material );
@@ -104,7 +144,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 
         var texture = new THREE.TextureLoader().load("assets/evergreen.jpg");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        var material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+        var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
         texture.repeat.set( 4, 4 );
 
         var crown = new THREE.Mesh( geometry, material );
@@ -116,7 +156,6 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
         scene.add( cylinder );
     }
 }
-
 
 
 // camera
@@ -172,6 +211,7 @@ var scale = 0, scaleFactor = 0;
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
+    animateFireflies();
     renderer.render(scene, camera);
     // if (speakerModelLoaded) {
     //     scale += clock.getDelta();
@@ -189,7 +229,7 @@ var animate = function () {
 function onWindowResize(){
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight);
 }
 
 
