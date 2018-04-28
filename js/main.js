@@ -122,6 +122,32 @@ camera.position.z = 10;
 camera.position.y = 5;
 camera.lookAt(cylinder.position);
 window.addEventListener( 'resize', onWindowResize, false );
+
+// positional audio
+// create an AudioListener and add it to the camera
+var listener = new THREE.AudioListener();
+camera.add( listener );
+
+// create the PositionalAudio object (passing in the listener)
+var sound = new THREE.PositionalAudio( listener );
+
+// load a sound and set it as the PositionalAudio object's buffer
+var audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
+    sound.setBuffer( buffer );
+    sound.setRefDistance( 150 );
+    sound.play();
+});
+
+// create an object for the sound to play from
+var sphere = new THREE.SphereGeometry( 20, 32, 16 );
+var material = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+var mesh = new THREE.Mesh( sphere, material );
+scene.add( mesh );
+
+// finally add the sound to the mesh
+mesh.add( sound );
+
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
