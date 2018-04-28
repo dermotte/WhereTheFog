@@ -4,14 +4,15 @@ var firefliesGeometry;
 
 function addFireflies(scene){
     /* DO STUFF! */
-    var material = new THREE.PointCloudMaterial({
-        color: 0xFFD700,
+    var material = new THREE.PointsMaterial({
+        color: 0xFFF66D,
+
     });
 
-    firefliesGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+    firefliesGeometry = new THREE.Geometry();
     var x, y, z;
     _.times(500, function(){
-        x = THREE.Math.randFloatSpread( 400 );
+        x = THREE.Math.randFloatSpread( 400 ) + 10;
         y = THREE.Math.randFloatSpread( 400 );
         z = THREE.Math.randFloatSpread( 400 ) ;
 
