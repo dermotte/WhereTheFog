@@ -1,5 +1,43 @@
 var NUMBER_OF_TREES = 200;
 
+var firefliesGeometry;
+
+function addFireflies(scene){
+    /* DO STUFF! */
+    var material = new THREE.PointCloudMaterial({
+        color: 0xFFD700
+    });
+
+    firefliesGeometry = new THREE.Geometry();
+    var x, y, z;
+    _.times(500, function(){
+        x = THREE.Math.randFloatSpread( 400 );
+        y = THREE.Math.randFloatSpread( 400 );
+        z = THREE.Math.randFloatSpread( 400 ) ;
+
+        firefliesGeometry.vertices.push(new THREE.Vector3(x, y, z));
+
+    });
+    var pointCloud = new THREE.PointCloud(firefliesGeometry, material);
+    scene.add(pointCloud);
+}
+
+function animateFireflies() {
+
+    //wiggle wiggle...
+    _.forEach(firefliesGeometry.vertices, function(particle){
+        var dX, dY, dZ;
+        dX = Math.random() * 0.1 - 0.05;
+        dY = Math.random() * 0.1 - 0.05;
+        dZ = Math.random() * 0.1 - 0.05;
+
+        particle.add(new THREE.Vector3(dX, dY, dZ));
+    });
+    firefliesGeometry.verticesNeedUpdate = true;
+}
+
+
+
 var scene = new THREE.Scene();
 
 scene.background = new THREE.Color( 0xf0f0f0 );
@@ -48,6 +86,7 @@ plane.scale.y = 100;
 plane.receiveShadow = true;
 scene.add( plane );
 
+addFireflies(scene);
 
 //Wood
 for (var i = 0; i< NUMBER_OF_TREES; i++) {
@@ -116,7 +155,6 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
 }
 
 
-
 // camera
 camera.position.z = 10;
 camera.position.y = 5;
@@ -165,6 +203,7 @@ loader.loadMtl( 'assets/Speaker.mtl', null, onLoadMtl );
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
+    animateFireflies();
     renderer.render(scene, camera);
 };
 
