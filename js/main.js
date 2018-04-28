@@ -40,10 +40,10 @@ function animateFireflies() {
 
 var scene = new THREE.Scene();
 
-scene.background = new THREE.Color( 0xf0f0f0 );
-scene.add( new THREE.AmbientLight( 0x505050 ) );
+scene.background = new THREE.Color( 0x606060 );
+scene.add( new THREE.AmbientLight( 0x303030 ) );
 // Nebel
-scene.fog = new THREE.Fog( scene.background, 1, 100 );
+scene.fog = new THREE.Fog( scene.background, 1, 50 );
 
 // Licht
 dirLight = new THREE.DirectionalLight( 0xffffff );
@@ -70,7 +70,7 @@ document.body.appendChild( renderer.domElement );
 var geometry = new THREE.PlaneGeometry( 20, 20, 32 );
 //var material = new THREE.MeshLambertMaterial( {color: 0x158116, side: THREE.DoubleSide} );
 
-var texture = new THREE.TextureLoader().load("assets/gras.png");
+var texture = new THREE.TextureLoader().load("assets/gras_dark.png");
 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 400, 400 );
 
@@ -180,15 +180,20 @@ audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
 
 // instantiate a loader
 var loader = new THREE.OBJLoader2();
-var speakerModel = 0;
+var speakerModel;
+var speakerModelLoaded = false;
 var callbackOnLoad = function ( event ) {
     speakerModel = event.detail.loaderRootNode;
     scene.add( speakerModel );
     speakerModel.add( sound );
     speakerModel.position.x=250;
     speakerModel.position.z=250;
+    speakerModel.position.y=1;
+    speakerModel.scale.x=1.5;
+    speakerModel.scale.y=1.5;
+    speakerModel.scale.z=1.5;
     console.log( 'Loading complete: ' + event.detail.modelName );
-
+    speakerModelLoaded = true;
 };
 
 var onLoadMtl = function ( materials ) {
@@ -199,18 +204,29 @@ var onLoadMtl = function ( materials ) {
 };
 loader.loadMtl( 'assets/Speaker.mtl', null, onLoadMtl );
 
-
+var scale = 0, scaleFactor = 0;
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
     animateFireflies();
     renderer.render(scene, camera);
+    // if (speakerModelLoaded) {
+    //     scale += clock.getDelta();
+    //     if (scale % 2 > 1)
+    //         scaleFactor = 1 - scale % 1;
+    //     else
+    //         scaleFactor = scale % 1;
+    //     speakerModel.scale.x = 1 + 2 * EasingFunctions.easeInOutQuad(scaleFactor);
+    //     speakerModel.scale.y = 1 + 2 * EasingFunctions.easeInOutQuad(scaleFactor);
+    //     speakerModel.scale.z = 1 + 2 * EasingFunctions.easeInOutQuad(scaleFactor);
+    //     console.log(scaleFactor)
+    // }
 };
 
 function onWindowResize(){
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight);
 }
 
 
