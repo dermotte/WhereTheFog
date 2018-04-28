@@ -1,11 +1,11 @@
-var NUMBER_OF_TREES = 200;
+var NUMBER_OF_TREES = 500;
 
 var scene = new THREE.Scene();
 
 scene.background = new THREE.Color( 0xf0f0f0 );
 scene.add( new THREE.AmbientLight( 0x505050 ) );
 // Nebel
-scene.fog = new THREE.Fog( scene.background, 1, 100 );
+scene.fog = new THREE.Fog( scene.background, 1, 25 );
 
 // Licht
 dirLight = new THREE.DirectionalLight( 0xffffff );
@@ -18,11 +18,11 @@ dirLight.shadow.mapSize.height = 1024;
 scene.add( dirLight );
 
 var clock = new THREE.Clock();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 100 );
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 50 );
 controls = new THREE.FirstPersonControls(camera);
 controls.movementSpeed = 10;
 controls.lookSpeed = 0.1;
-controls.lookVertical = false;
+controls.lookVertical = true;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
