@@ -190,7 +190,7 @@ var callbackOnLoad = function ( event ) {
     speakerModel.add( sound );
     speakerModel.position.x=250;
     speakerModel.position.z=250;
-    speakerModel.position.y=1;
+    speakerModel.position.y=0;
     speakerModel.scale.x=1.5;
     speakerModel.scale.y=1.5;
     speakerModel.scale.z=1.5;
@@ -319,7 +319,7 @@ var callbackOnLoadCredits = function ( event ) {
     credModel.add(sound);
     credModel.position.x = 250;
     credModel.position.z = 250;
-    credModel.position.y = 4;
+    credModel.position.y = 5;
     credModel.scale.x = 1.5;
     credModel.scale.y = 1.5;
     credModel.scale.z = 1.5;
@@ -338,7 +338,7 @@ var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
     animateFireflies();
-    credModel.rotation.y += 0.01;
+    if(credModel != undefined) credModel.rotation.y += 0.01;
     renderer.render(scene, camera);
     // if (speakerModelLoaded) {
     //     scale += clock.getDelta();
