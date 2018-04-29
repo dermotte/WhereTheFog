@@ -1,4 +1,4 @@
-var NUMBER_OF_TREES = 200;
+var NUMBER_OF_TREES = 100;
 
 var firefliesGeometry;
 
@@ -57,11 +57,11 @@ dirLight.shadow.mapSize.height = 1024;
 scene.add( dirLight );
 
 var clock = new THREE.Clock();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 100 );
+var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 10000 );
 controls = new THREE.FirstPersonControls(camera);
 controls.movementSpeed = 10;
 controls.lookSpeed = 0.1;
-controls.lookVertical = true;
+controls.lookVertical = false;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -73,7 +73,7 @@ var geometry = new THREE.PlaneGeometry( 20, 20, 32 );
 
 var texture = new THREE.TextureLoader().load("assets/gras_dark.png");
 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-texture.repeat.set( 400, 400 );
+texture.repeat.set( 200, 200 );
 
 var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
 
@@ -94,7 +94,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
     var woodtype = Math.round(Math.random());
     if(woodtype==0){
     //create standard tree
-        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
+        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 10 );
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -124,7 +124,7 @@ for (var i = 0; i< NUMBER_OF_TREES; i++) {
         scene.add( cylinder );
     }else if(woodtype==1){
     //Create "nadelbaum"
-        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 100 );
+        geometry = new THREE.CylinderGeometry( 0.8, 1, 10, 10 );
 
         var texture = new THREE.TextureLoader().load("assets/bark.png");
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -177,14 +177,17 @@ var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
     sound.setBuffer( buffer );
     sound.setRefDistance( 50 );
-    sound.setRolloffFactor(5)
+    sound.setRolloffFactor(5);
+    sound.setLoop(true);
     sound.play();
+
 });
 
 // instantiate a loader
 var loader = new THREE.OBJLoader2();
 var speakerModel;
 var speakerModelLoaded = false;
+var spotLight;
 var callbackOnLoad = function ( event ) {
     speakerModel = event.detail.loaderRootNode;
     scene.add( speakerModel );
@@ -197,6 +200,110 @@ var callbackOnLoad = function ( event ) {
     speakerModel.scale.z=1.5;
     console.log( 'Loading complete: ' + event.detail.modelName );
     speakerModelLoaded = true;
+
+    //Dancefloor at speaker
+    var geometry = new THREE.CircleGeometry(30,32);
+    var texture = new THREE.TextureLoader().load("assets/tile.jpg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    var material = new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide})
+    texture.repeat.set( 4, 4 );
+    var dancefloor = new THREE.Mesh( geometry, material );
+    dancefloor.rotation.x = Math.PI / 2;
+    dancefloor.translateY(-1);
+    dancefloor.receiveShadow = true;
+    dancefloor.position.set(250,0.01,250);
+    scene.add( dancefloor );
+
+
+    //spotlights
+    spotLight = new THREE.SpotLight( 0xff0000, 2);
+    spotLight.position.set(260,20,260);
+    spotLight.angle = Math.PI / 4;
+	spotLight.penumbra = 0;
+	spotLight.decay = 1;
+	spotLight.distance = 200;
+
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
+    scene.add( spotLight );
+    spotLight.target = speakerModel;
+    spotLight.target.updateMatrixWorld();
+    scene.add( spotLight.target);
+
+	//lightHelper = new THREE.SpotLightHelper( spotLight );
+	//scene.add( lightHelper );
+
+    spotLight2 = new THREE.SpotLight( 0xff0f, 2);
+    spotLight2.position.set(240,20,240);
+    spotLight2.angle = Math.PI / 4;
+	spotLight2.penumbra = 0;
+	spotLight2.decay = 1;
+	spotLight2.distance = 200;
+
+    spotLight2.castShadow = true;
+    spotLight2.shadow.mapSize.width = 1024;
+    spotLight2.shadow.mapSize.height = 1024;
+
+    spotLight2.shadow.camera.near = 500;
+    spotLight2.shadow.camera.far = 4000;
+    spotLight2.shadow.camera.fov = 30;
+    scene.add( spotLight2 );
+    spotLight2.target = speakerModel;
+    spotLight2.target.updateMatrixWorld();
+    scene.add( spotLight2.target);
+
+	//lightHelper2 = new THREE.SpotLightHelper( spotLight2 );
+	//scene.add( lightHelper2 );
+
+    spotLight3 = new THREE.SpotLight( 0xefff00, 2);
+    spotLight3.position.set(240,20,260);
+    spotLight3.angle = Math.PI / 4;
+	spotLight3.penumbra = 0;
+	spotLight3.decay = 1;
+	spotLight3.distance = 200;
+
+    spotLight3.castShadow = true;
+    spotLight3.shadow.mapSize.width = 1024;
+    spotLight3.shadow.mapSize.height = 1024;
+
+    spotLight3.shadow.camera.near = 500;
+    spotLight3.shadow.camera.far = 4000;
+    spotLight3.shadow.camera.fov = 30;
+    scene.add( spotLight3 );
+    spotLight3.target = speakerModel;
+    spotLight3.target.updateMatrixWorld();
+    scene.add( spotLight3.target);
+
+	//lightHelper3 = new THREE.SpotLightHelper( spotLight3 );
+	//scene.add( lightHelper3 );
+
+    spotLight4 = new THREE.SpotLight( 0x2c00ff, 2);
+    spotLight4.position.set(260,20,240);
+    spotLight4.angle = Math.PI / 4;
+	spotLight4.penumbra = 0;
+	spotLight4.decay = 1;
+	spotLight4.distance = 200;
+
+    spotLight4.castShadow = true;
+    spotLight4.shadow.mapSize.width = 1024;
+    spotLight4.shadow.mapSize.height = 1024;
+
+    spotLight4.shadow.camera.near = 500;
+    spotLight4.shadow.camera.far = 4000;
+    spotLight4.shadow.camera.fov = 30;
+    scene.add( spotLight4 );
+    spotLight4.target = speakerModel;
+    spotLight4.target.updateMatrixWorld();
+    scene.add( spotLight4.target);
+
+	//lightHelper4 = new THREE.SpotLightHelper( spotLight4 );
+	//scene.add( lightHelper4 );
+
 };
 
 var onLoadMtl = function ( materials ) {
