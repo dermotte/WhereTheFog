@@ -310,11 +310,35 @@ var onLoadMtl = function ( materials ) {
 };
 loader.loadMtl( 'assets/Speaker.mtl', null, onLoadMtl );
 
+
+var loaderCredits = new THREE.OBJLoader2();
+var credModel;
+var callbackOnLoadCredits = function ( event ) {
+    credModel = event.detail.loaderRootNode;
+    scene.add(credModel);
+    credModel.add(sound);
+    credModel.position.x = 250;
+    credModel.position.z = 250;
+    credModel.position.y = 4;
+    credModel.scale.x = 1.5;
+    credModel.scale.y = 1.5;
+    credModel.scale.z = 1.5;
+    console.log('Loading complete: ' + event.detail.modelName);
+}
+var onLoadMtlCredits = function ( materials ) {
+    loaderCredits.setModelName( 'credits' );
+    loaderCredits.setMaterials( materials );
+    loaderCredits.setLogging( true, true );
+    loaderCredits.load( 'assets/credits.obj', callbackOnLoadCredits, null, null, null, false );
+};
+loaderCredits.loadMtl( 'assets/credits.mtl', null, onLoadMtlCredits );
+
 var scale = 0, scaleFactor = 0;
 var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
     animateFireflies();
+    credModel.rotation.y += 0.01;
     renderer.render(scene, camera);
     // if (speakerModelLoaded) {
     //     scale += clock.getDelta();
