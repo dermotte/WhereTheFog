@@ -175,8 +175,6 @@ audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
     sound.setRefDistance( 50 );
     sound.setRolloffFactor(5);
     sound.setLoop(true);
-    sound.play();
-
 });
 
 // instantiate a loader
