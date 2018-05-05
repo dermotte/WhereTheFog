@@ -37,9 +37,10 @@ function animateFireflies() {
     firefliesGeometry.verticesNeedUpdate = true;
 }
 
-
-
 var scene = new THREE.Scene();
+var goal = new THREE.Vector3(250, 0, 250);
+var vecA = new THREE.Vector3(0, 0, 0);
+var vecB = new THREE.Vector3(0, 0, 0);
 
 scene.background = new THREE.Color( 0x606060 );
 scene.add( new THREE.AmbientLight( 0x303030 ) );
@@ -167,14 +168,21 @@ camera.add( listener );
 
 // create the PositionalAudio object (passing in the listener)
 var sound = new THREE.PositionalAudio( listener );
+var filter
 
 // load a sound and set it as the PositionalAudio object's buffer
 var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'assets/party-in-the-woods.ogg', function( buffer ) {
     sound.setBuffer( buffer );
-    sound.setRefDistance( 50 );
+    sound.setRefDistance( 300 );
     sound.setRolloffFactor(5);
     sound.setLoop(true);
+    filter = sound.context.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(500, sound.context.currentTime);
+    // sound is at (250, 0, 250);
+    // filter.gain.setValueAtTime(1, sound.context.currentTime);
+    sound.setFilter(filter);
 });
 
 // instantiate a loader
@@ -336,6 +344,16 @@ var animate = function () {
     requestAnimationFrame( animate );
     controls.update( clock.getDelta() );
     animateFireflies();
+    // update filter settings based on the angle ... a low pass filter for when people are looking away :)
+    vecA.subVectors(camera.position, controls.target);
+    vecB.subVectors(camera.position, goal);
+    if (vecA.angleTo(vecB)<Math.PI/2) {
+        filter.frequency.setValueAtTime(22500, sound.context.currentTime);
+    } else {
+        freq = (vecA.angleTo(vecB) - Math.PI/2) / (Math.PI/2);
+        filter.frequency.setValueAtTime(50 + 450*(1-freq), sound.context.currentTime);
+    }
+
     if(credModel != undefined) credModel.rotation.y += 0.01;
     renderer.render(scene, camera);
     // if (speakerModelLoaded) {
